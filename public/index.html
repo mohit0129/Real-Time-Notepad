@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Notepad</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        #notepad {
+            width: 100%;
+            height: 80vh;
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-size: 16px;
+            background-color: white;
+            resize: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Real-Time Notepad</h1>
+    <textarea id="notepad" placeholder="Start typing..."></textarea>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        const notepad = document.getElementById('notepad');
+
+        // Emit note update on input
+        notepad.addEventListener('input', () => {
+            socket.emit('note update', notepad.value);
+        });
+
+        // Listen for note updates from others
+        socket.on('note update', (data) => {
+            notepad.value = data;
+        });
+    </script>
+</body>
+</html>
